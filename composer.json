@@ -1,5 +1,6 @@
 {
     "require": {
-        "telegram-bot/api": "^2.3"
+        "telegram-bot/api": "^2.3",
+        "bogdaan/viber-bot-php": "^0.0.13"
     }
 }

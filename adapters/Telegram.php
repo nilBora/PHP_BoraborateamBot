@@ -10,13 +10,15 @@ use TelegramBot\Api\Types\Update as BotUpdateType;
 class Telegram implements IBot
 {
     private $_bot;
+    private $_db;
     
-    public function init()
+    public function init($db)
     {
+        $this->_db = $db;
         $this->_bot = new BotClient(TELEGRAM_TOKEN);
         
         $this->_initCommands();
-    
+        
         $this->_bot->run();
     } // end init
     
@@ -53,31 +55,52 @@ class Telegram implements IBot
     public function doSendMsgCommand()
     {
         $bot = $this->_bot;
-        $bot->command('msg', function ($message) use ($bot) {
+        $instance = &$this;
+        $bot->command('msg', function ($message) use ($bot, $instance) {
             $text = $message->getText();
             $param = str_replace('/msg ', '', $text);
-        
-        
+            
+            
             $data = explode("|", $param);
-        
+            
             $time = array_pop($data);
             $date = date("Y-m-d H:i:s", strtotime($time));
-        
+            $msg = array_pop($data);
             $answer = $date;
             
-            $dataStore = json_decode(file_get_contents(STORE_PATH), true);
-            if (!$dataStore) {
-                $dataStore = [];
-            }
-            $idUser = $message->getChat()->getId();
-            $dataStore[date("Y-m-d", strtotime($time))][$date][$idUser] = array_pop($data);
-        
-            file_put_contents(STORE_PATH, json_encode($dataStore));
-        
-        
+//            $dataStore = json_decode(file_get_contents(STORE_PATH), true);
+//            if (!$dataStore) {
+//                $dataStore = [];
+//            }
+//            $idUser = $message->getChat()->getId();
+//
+//            $dataStore[date("Y-m-d", strtotime($time))][$date][$idUser] = $msg;
+//
+//            file_put_contents(STORE_PATH, json_encode($dataStore));
+            
+            $instance->_addMessage($message, $date, $msg);
+            
             $bot->sendMessage($message->getChat()->getId(), $answer);
         });
     } // end doSendMsgCommand
+    
+    private function _addMessage($message, $date, $msg)
+    {
+        $data = [
+            'userId' => $message->getChat()->getId(),
+            'date'   => $date,
+            'msg'    => $msg
+        ];
+        
+        $values = [
+            'type'  => 'telegram',
+            'data'  => json_encode($data),
+            'date_send' => date("Y-m-d", strtotime($date)),
+            'cdate' => date("Y-m-d H:i:s")
+        ];
+        
+        $this->_db->insert('queue', $values);
+    }
     
     private function _getCommandNameByRequest()
     {

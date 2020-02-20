@@ -2,3 +2,4 @@ local.php
 vendor/*
 composer.lock
 store/*
+.env

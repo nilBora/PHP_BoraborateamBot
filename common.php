@@ -3,6 +3,7 @@
 $CONFIG = [];
 
 include_once "vendor/autoload.php";
+include_once "database/PdoObjectAdapter.php";
 include_once "config.php";
 
 $localPath = __DIR__.'/local.php';

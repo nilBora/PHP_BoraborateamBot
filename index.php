@@ -1,7 +1,10 @@
 <?php
 
 include_once "common.php";
+use Bot\Database\PdoObjectAdapter;
 
 $factory = Bot\Adapters\BotFactory::factory("Telegram");
 
-$factory->init();
+$db = new PdoObjectAdapter();
+
+$factory->init($db);

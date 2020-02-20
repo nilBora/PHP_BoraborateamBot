@@ -4,5 +4,5 @@ namespace Bot\Adapters;
 
 interface IBot
 {
-    public function init();
+    public function init($db);
 }
