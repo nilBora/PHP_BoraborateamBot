@@ -8,9 +8,9 @@ class PdoObjectAdapter
     public function __construct()
     {
         $db = new \PDO(
-            'mysql:host='.$GLOBALS['DB']['host'].';dbname='.$GLOBALS['DB']['name'],
-            $GLOBALS['DB']['user'],
-            $GLOBALS['DB']['password']
+            'mysql:host='.getenv("DB_HOST").';dbname='.getenv("DB_NAME"),
+            getenv("DB_USER"),
+            getenv("DB_PASSWORD")
         );
         
         $this->db = $db;

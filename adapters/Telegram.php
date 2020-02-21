@@ -7,7 +7,7 @@ use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update as BotUpdateType;
 
 
-class Telegram implements IBot
+class Telegram extends AbstractBot implements IBot
 {
     private $_bot;
     private $_db;
@@ -15,7 +15,8 @@ class Telegram implements IBot
     public function init($db)
     {
         $this->_db = $db;
-        $this->_bot = new BotClient(TELEGRAM_TOKEN);
+        $token = $this->getOption("TELEGRAM_TOKEN");
+        $this->_bot = new BotClient($token);
         
         $this->_initCommands();
         

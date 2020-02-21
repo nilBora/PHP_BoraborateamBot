@@ -1,6 +1,7 @@
 {
     "require": {
         "telegram-bot/api": "^2.3",
-        "bogdaan/viber-bot-php": "^0.0.13"
+        "bogdaan/viber-bot-php": "^0.0.13",
+        "vlucas/phpdotenv": "^4.1"
     }
 }

@@ -6,12 +6,6 @@ include_once "vendor/autoload.php";
 include_once "database/PdoObjectAdapter.php";
 include_once "config.php";
 
-$localPath = __DIR__.'/local.php';
-if (file_exists($localPath)) {
-    require_once $localPath;
-}
-
-
 foreach ($CONFIG as $key => $value) {
     if (!is_scalar($value)) {
         continue;
